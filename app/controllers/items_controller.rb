@@ -2,18 +2,20 @@ class ItemsController < ApplicationController
 	before_action :find_item, only: [:show, :edit, :update, :destroy]
 
 	def index
-		@items = Item.all
+		if user_signed_in?
+			@items = Item.where(:user_id => current_user.id).order('created_at ASC')
+		end
 	end
 
 	def show
 	end
 
 	def new
-		@item = Item.new
+		@item = current_user.items.build
 	end
 
 	def create
-		@item = Item.new(item_params)
+		@item = current_user.items.build(item_params)
 		if @item.save
 			redirect_to root_path
 		else
@@ -40,7 +42,7 @@ class ItemsController < ApplicationController
 	private
 
 	def item_params
-		params.require(:item).permit(:title, :description)
+		params.require(:item).permit(:title, :description, :created_at)
 	end
 
 	def find_item

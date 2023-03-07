@@ -1,6 +1,9 @@
-<h1>Todos</h1>
-
-<% @items.each do |f| %>
-	<h3><%= link_to f.title, f %></h3>
-	<p><%= f.description %></p>
+<% if user_signed_in? %>
+	<% @items.each do |f| %>
+		<h3><%= link_to f.title, f %></h3>
+		<p><%= f.description %></p>
+	<% end %>
+<% else %>
+	<%= render 'welcome_page' %>
 <% end %>
+ 
